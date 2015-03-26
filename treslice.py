@@ -1,4 +1,3 @@
-import sys
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -46,7 +45,7 @@ class TreSlice:
 
     def makePlot(self):
         ax = self.fig.gca()
-        axes = np.take(self.axes, self.views[self.curAxis])
+        axes = np.take(self.axes, self.views[self.curAxis], axis = 0)
         labels = np.take(self.labels, self.views[self.curAxis])
         heatmap = ax.pcolormesh(axes[1], axes[2],
             np.rollaxis(self.data, self.curAxis)[self.curSlice, :, :].T,
@@ -57,8 +56,12 @@ class TreSlice:
         ax.set_title('{0} = {1}'.format(labels[0], axes[0][self.curSlice]))
         self.fig.colorbar(heatmap)
 
-if len(sys.argv) < 2: print('Usage: python -m treslice filename')
-data = np.load(sys.argv[1])
-plot = TreSlice(data['X'], data['Y'], data['Z'], data['C'])
-plot.show()
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) < 2:
+        print('Usage: python -m treslice filename')
+        sys.exit(0)
+    data = np.load(sys.argv[1])
+    plot = TreSlice(data['X'], data['Y'], data['Z'], data['C'])
+    plot.show()
 
