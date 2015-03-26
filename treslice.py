@@ -59,7 +59,7 @@ class TreSlice:
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print('Usage: python -m treslice filename')
+        print('Usage: python treslice.py filename')
         sys.exit(0)
     data = np.load(sys.argv[1])
     plot = TreSlice(data['X'], data['Y'], data['Z'], data['C'])
