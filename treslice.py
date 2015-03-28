@@ -1,6 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+
 class TreSlice:
     def __init__(self, X, Y, Z, C):
         self.data = C
@@ -17,7 +18,8 @@ class TreSlice:
         if event.key == ' ':
             self.curAxis += 1
             self.curSlice = 0
-            if self.curAxis > 2: self.curAxis = 0
+            if self.curAxis > 2:
+                self.curAxis = 0
             self.refresh()
         elif event.key == 'up':
             self.move(1)
@@ -30,7 +32,7 @@ class TreSlice:
 
     def move(self, i):
         self.curSlice = max(min(self.curSlice + i,
-            len(self.axes[self.curAxis]) - 2), 0)
+                                len(self.axes[self.curAxis]) - 2), 0)
         self.refresh()
 
     def show(self):
@@ -45,16 +47,18 @@ class TreSlice:
 
     def makePlot(self):
         ax = self.fig.gca()
-        axes = np.take(self.axes, self.views[self.curAxis], axis = 0)
+        axes = np.take(self.axes, self.views[self.curAxis], axis=0)
         labels = np.take(self.labels, self.views[self.curAxis])
-        heatmap = ax.pcolormesh(axes[1], axes[2],
+        heatmap = ax.pcolormesh(
+            axes[1], axes[2],
             np.rollaxis(self.data, self.curAxis)[self.curSlice, :, :].T,
-            vmin = self.dataMin, vmax = self.dataMax)
+            vmin=self.dataMin, vmax=self.dataMax)
         ax.set_aspect('equal')
         ax.set_xlabel(labels[1])
         ax.set_ylabel(labels[2])
         ax.set_title('{0} = {1}'.format(labels[0], axes[0][self.curSlice]))
         self.fig.colorbar(heatmap)
+
 
 if __name__ == '__main__':
     import sys
@@ -64,4 +68,3 @@ if __name__ == '__main__':
     data = np.load(sys.argv[1])
     plot = TreSlice(data['X'], data['Y'], data['Z'], data['C'])
     plot.show()
-
